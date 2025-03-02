@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine Date Invitation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fef4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s; /* Hiệu ứng chuyển màu nền mượt */
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 2rem;
+      color: #ff6b81;
+    }
+
+    .character {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      background: url('https://assets.grok.com/users/f64564cc-8ff5-434b-b38f-2e6d57461a91/g2frtigAVI1NF1jW-generated_image.jpg') no-repeat center/cover;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .question {
+      font-size: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-yes {
+      background: #ff6b81;
+      color: #fff;
+    }
+    .btn-yes:hover {
+      background: #ff8fa1;
+    }
+    .btn-no {
+      background: #ddd;
+      position: relative; /* Để nút "No" có thể di chuyển */
+    }
+    .btn-no:hover {
+      background: #ccc;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #4a4a4a;
+      text-align: center;
+      display: none;
+    }
+
+    .hearts {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: url('https://assets.grok.com/users/f64564cc-8ff5-434b-b38f-2e6d57461a91/g2frtigAVI1NF1jW-generated_image.jpg') no-repeat center/contain;
+      animation: float 3s ease-out forwards;
+      pointer-events: none;
+    }
+
+    .sad-face {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: url('https://assets.grok.com/users/f64564cc-8ff5-434b-b38f-2e6d57461a91/g2frtigAVI1NF1jW-generated_image.jpg') no-repeat center/contain;
+      animation: drop 2s ease-out forwards;
+      pointer-events: none;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff6b81;
+      border-radius: 50%;
+      animation: confettiFall 2s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-300px); }
+    }
+
+    @keyframes drop {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(200px); }
+    }
+
+    @keyframes confettiFall {
+      0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(400px) rotate(720deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Will you marry me?</h1>
+  <div class="character"></div>
+  <div class="question">Hòa làm người yêu Thắng nhé?</div>
+  <div class="buttons">
+    <button class="btn-yes">Yes</button>
+    <button class="btn-no">No</button>
+  </div>
+  <div class="message" id="message"></div>
+
+  <!-- Audio -->
+  <audio id="yesSound" src="https://www.myinstants.com/media/sounds/yes-2.mp3"></audio>
+  <audio id="noSound" src="https://www.myinstants.com/media/sounds/nooo.mp3"></audio>
+  <audio id="applauseSound" src="https://www.myinstants.com/media/sounds/applause-4.mp3"></audio>
+
+  <script>
+    const btnYes = document.querySelector('.btn-yes');
+    const btnNo = document.querySelector('.btn-no');
+    const message = document.getElementById('message');
+    const yesSound = document.getElementById('yesSound');
+    const noSound = document.getElementById('noSound');
+    const applauseSound = document.getElementById('applauseSound');
+
+    // Hàm tạo hình ảnh động (hearts, sad-face, confetti)
+    function createAnimatedImage(className, x, y) {
+      const img = document.createElement('div');
+      img.className = className;
+      img.style.left = `${x}px`;
+      img.style.top = `${y}px`;
+      document.body.appendChild(img);
+      setTimeout(() => img.remove(), 3000);
+    }
+
+    // Hiệu ứng Confetti
+    function createConfetti() {
+      for (let i = 0; i < 20; i++) {
+        const x = Math.random() * window.innerWidth;
+        const y = -20; // Bắt đầu từ trên cùng
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = `${x}px`;
+        confetti.style.top = `${y}px`;
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`; // Màu ngẫu nhiên
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 2000);
+      }
+    }
+
+    // Xử lý nút Yes
+    btnYes.addEventListener('click', () => {
+      message.style.display = 'block';
+      message.style.color = '#ff6b81';
+      message.textContent = 'Có phải là mơ không. Yêu Hòa thế nhờ hihi ♥';
+      yesSound.play();
+      applauseSound.play();
+      document.body.style.background = '#ffe6e6'; // Thay đổi màu nền khi nhấn Yes
+
+      // Tạo trái tim và confetti
+      for (let i = 0; i < 5; i++) {
+        const x = Math.random() * window.innerWidth;
+        const y = window.innerHeight - 100;
+        createAnimatedImage('hearts', x, y);
+      }
+      createConfetti();
+    });
+
+    // Xử lý nút No
+    btnNo.addEventListener('click', () => {
+      message.style.display = 'block';
+      message.style.color = '#555';
+      message.textContent = 'Ồ, Lần sau anh lại tỏ tình Hòa!';
+      noSound.play();
+      document.body.style.background = '#e6e6e6'; // Thay đổi màu nền khi nhấn No
+
+      // Tạo mặt buồn
+      for (let i = 0; i < 3; i++) {
+        const x = Math.random() * window.innerWidth;
+        const y = 100;
+        createAnimatedImage('sad-face', x, y);
+      }
+    });
+
+    // Hiệu ứng nút No di chuyển
+    btnNo.addEventListener('mouseover', () => {
+      const maxX = window.innerWidth - btnNo.offsetWidth;
+      const maxY = window.innerHeight - btnNo.offsetHeight;
+      const newX = Math.random() * maxX;
+      const newY = Math.random() * maxY;
+      btnNo.style.position = 'absolute';
+      btnNo.style.left = `${newX}px`;
+      btnNo.style.top = `${newY}px`;
+    });
+  </script>
+</body>
+</html>
